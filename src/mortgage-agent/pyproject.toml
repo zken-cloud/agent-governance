@@ -16,7 +16,7 @@
 name = "mortgage-agent"
 version = "0.1.0"
 description = "ADK mortgage assistant agent with Agent Gateway MCP connections"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     # The [a2a,agent-identity] extras pull a2a-sdk and
     # google-cloud-iamconnectorcredentials at the versions google-adk's
