@@ -62,19 +62,43 @@ graph TD
 
 ## Setup & Environment Bootstrapping (10 Mins)
 
-### Step 1: Access Cloud Shell
+### Step 1: Access Cloud Shell & Set Project Context
 In the Google Cloud Console, click **Activate Cloud Shell** (the icon in the top right toolbar). 
 
+If you are using a newly allocated or fresh GCP sandbox project, explicitly set your active configuration context in `gcloud`:
+
+```bash
+gcloud config set project <your-allocated-project-id>
+```
+
+Verify that the active account and project are correct:
+```bash
+gcloud config list
+```
+
 ### Step 2: Navigate and Bootstrap
-The lab files are located in your workspace directory. Run the following command to bootstrap your environment using the custom setup script. This script automatically detects your active GCP Project, enables required bootstrap APIs, creates the remote Terraform state bucket, and populates your backend and variables config:
+The lab files are located in your workspace directory. Run the following commands to navigate to the workspace and execute the custom bootstrap setup script:
 
 ```bash
 cd /Users/zken/.gemini/antigravity/scratch/cloudnet-agent-gateway-lab
 ./scripts/setup_lab.sh
 ```
 
+This bootstrap script automates several crucial steps:
+1. Installs/upgrades prerequisites (`uv`, `skaffold`, `envsubst`).
+2. Creates a centralized Terraform remote GCS state bucket named `<project-id>-tfstate`.
+3. Populates `terraform/backend.conf` and `terraform/terraform.tfvars` automatically.
+4. Auto-enables the complete suite of **17 Google Cloud APIs** required for the lab:
+   * **Base & Core**: `compute.googleapis.com`, `serviceusage.googleapis.com`, `cloudresourcemanager.googleapis.com`, `iam.googleapis.com`, `storage.googleapis.com`
+   * **Routing & DNS**: `dns.googleapis.com`, `servicedirectory.googleapis.com`
+   * **Containers & Serverless**: `run.googleapis.com`, `artifactregistry.googleapis.com`
+   * **Security, Gateway, and IAP**: `networkservices.googleapis.com`, `networksecurity.googleapis.com`, `iap.googleapis.com`
+   * **GenAI & Safety**: `modelarmor.googleapis.com`, `aiplatform.googleapis.com`
+   * **Observability**: `logging.googleapis.com`, `monitoring.googleapis.com`, `cloudtrace.googleapis.com`
+
 > [!NOTE]
 > The setup script will attempt to auto-detect your parent organization ID. If it is running in a standalone sandbox with no organization hierarchy, it will fall back to using a dummy value (`123456789012`). This is perfectly fine for the default public ingress path.
+
 
 ---
 

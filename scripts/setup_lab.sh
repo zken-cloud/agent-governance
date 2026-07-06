@@ -69,31 +69,61 @@ fi
 
 # Check for skaffold
 if ! command -v skaffold &> /dev/null; then
-    echo -e "  Installing ${BLUE}skaffold${RESET}..."
-    curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
-    sudo install skaffold /usr/local/bin/
-    rm skaffold
+    echo -e "  Installing ${BLUE}skaffold${RESET} locally..."
+    OS_NAME=$(uname -s | tr '[:upper:]' '[:lower:]')
+    ARCH_NAME=$(uname -m)
+    if [[ "$ARCH_NAME" == "x86_64" ]]; then
+        ARCH_NAME="amd64"
+    elif [[ "$ARCH_NAME" == "aarch64" || "$ARCH_NAME" == "arm64" ]]; then
+        ARCH_NAME="arm64"
+    fi
+    mkdir -p "${HOME}/.local/bin"
+    echo -e "  Downloading skaffold for ${OS_NAME}-${ARCH_NAME}..."
+    curl -Lo "${HOME}/.local/bin/skaffold" "https://storage.googleapis.com/skaffold/releases/latest/skaffold-${OS_NAME}-${ARCH_NAME}"
+    chmod +x "${HOME}/.local/bin/skaffold"
+    export PATH="${HOME}/.local/bin:${PATH}"
 else
     echo -e "  ${GREEN}✓${RESET} skaffold is already installed."
 fi
 
 # Check for envsubst (gettext-base)
 if ! command -v envsubst &> /dev/null; then
-    echo -e "  Installing ${BLUE}envsubst${RESET}..."
-    sudo apt-get update && sudo apt-get install -y gettext-base
+    echo -e "  Creating Python fallback wrapper for ${BLUE}envsubst${RESET}..."
+    mkdir -p "${HOME}/.local/bin"
+    cat > "${HOME}/.local/bin/envsubst" <<'EOF'
+#!/usr/bin/env python3
+import os, sys
+sys.stdout.write(os.path.expandvars(sys.stdin.read()))
+EOF
+    chmod +x "${HOME}/.local/bin/envsubst"
+    export PATH="${HOME}/.local/bin:${PATH}"
 else
     echo -e "  ${GREEN}✓${RESET} envsubst is already installed."
 fi
 
-# Step 3: Enable Bootstrap APIs
-echo -e "\n${GREEN}[Step 3/5] Enabling bootstrap APIs (Compute, Storage, Resource Manager, Cloud DNS, IAM)...${RESET}"
+
+# Step 3: Enable Required Google Cloud APIs
+echo -e "\n${GREEN}[Step 3/5] Enabling required Google Cloud APIs...${RESET}"
+echo -e "  This enables all foundational, routing, container, security, and AI services."
 gcloud services enable \
   compute.googleapis.com \
   serviceusage.googleapis.com \
   cloudresourcemanager.googleapis.com \
   iam.googleapis.com \
   storage.googleapis.com \
-  dns.googleapis.com
+  dns.googleapis.com \
+  run.googleapis.com \
+  artifactregistry.googleapis.com \
+  networkservices.googleapis.com \
+  networksecurity.googleapis.com \
+  modelarmor.googleapis.com \
+  aiplatform.googleapis.com \
+  iap.googleapis.com \
+  logging.googleapis.com \
+  monitoring.googleapis.com \
+  cloudtrace.googleapis.com \
+  servicedirectory.googleapis.com
+
 
 # Step 4: Configure GCS Terraform State Bucket
 echo -e "\n${GREEN}[Step 4/5] Creating GCS bucket for remote Terraform state...${RESET}"
