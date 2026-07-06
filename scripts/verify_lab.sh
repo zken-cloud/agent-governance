@@ -107,7 +107,7 @@ if ! gcloud alpha model-armor templates list --location="${REGION}" --project="$
         # Fallback 2: Check terraform state if gcloud command is blocked or failing (e.g. ECP Proxy issues)
         if [[ -d "terraform" ]]; then
             echo -e "  - ${YELLOW}gcloud query failed or returned no templates. Falling back to local Terraform state audit...${RESET}"
-            if (cd terraform && terraform state list -lock=false 2>/dev/null | grep -q "google_model_armor_template"); then
+            if (cd terraform && terraform state list 2>/dev/null | grep -q "google_model_armor_template"); then
                 echo -e "  - ${GREEN}Detected Model Armor Template resources in Terraform state.${RESET}"
             else
                 ma_fail=1
