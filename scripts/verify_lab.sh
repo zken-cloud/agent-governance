@@ -15,6 +15,8 @@
 
 set -uo pipefail
 
+export PATH="/Users/zken/.local/bin:$PATH"
+
 # Text formatting colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -107,11 +109,13 @@ if ! gcloud alpha model-armor templates list --location="${REGION}" --project="$
         # Fallback 2: Check terraform state if gcloud command is blocked or failing (e.g. ECP Proxy issues)
         if [[ -d "terraform" ]]; then
             echo -e "  - ${YELLOW}gcloud query failed or returned no templates. Falling back to local Terraform state audit...${RESET}"
-            if (cd terraform && terraform state list 2>/dev/null | grep -q "google_model_armor_template"); then
+            tf_out=$(cd terraform && terraform state list 2>&1)
+            if echo "$tf_out" | grep -q "google_model_armor_template"; then
                 echo -e "  - ${GREEN}Detected Model Armor Template resources in Terraform state.${RESET}"
             else
                 ma_fail=1
                 echo -e "  - ${RED}No active Model Armor templates found in GCP or Terraform state.${RESET}"
+                echo -e "    ${YELLOW}Terraform Output/Error:${RESET}\n$tf_out"
             fi
         else
             ma_fail=1
