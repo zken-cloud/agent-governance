@@ -67,7 +67,7 @@ graph TD
 3. **Set Project Context**:
    Set your active project context to the brand-new Google Cloud project allocated for this demo:
    ```bash
-   gcloud config set project zken-agent-governance
+   gcloud config set project <PROJECT_ID>
    ```
 
 ---
@@ -184,9 +184,9 @@ By default, zero-trust policies block your newly deployed agent from communicati
 
 Run the egress grant script using the active project context and your **Agent ID** captured in Phase 5:
 ```bash
-PROJECT_ID=zken-agent-governance \
-PROJECT_NUMBER=644450226197 \
-ORG_ID=284355623615 \
+PROJECT_ID=<PROJECT_ID> \
+PROJECT_NUMBER=<PROJECT_NUMBER> \
+ORG_ID=<ORG_ID> \
 REGION=us-central1 \
 ./scripts/grant_agent_mcp_egress.sh --agent-id <YOUR_DEPLOYED_AGENT_ID>
 ```
@@ -219,7 +219,7 @@ Our script enforces a strict zero-trust model by binding IAM policies directly t
 
 ### How to verify your policies in the Console:
 1. Open the GCP Console and go to **Govern** -> **Agent Registry**:
-   [https://console.cloud.google.com/agent-platform/registry?project=zken-agent-governance](https://console.cloud.google.com/agent-platform/registry?project=zken-agent-governance)
+   [https://console.cloud.google.com/agent-platform/registry?project=<PROJECT_ID>](https://console.cloud.google.com/agent-platform/registry?project=<PROJECT_ID>)
 2. Select the **MCP Servers** tab.
 3. Click on any server (e.g., `corporate-email`).
 4. In the detailed panel on the right side of the screen, open the **Permissions** panel.

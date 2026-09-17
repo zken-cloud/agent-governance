@@ -1,4 +1,0 @@
-name: projects/zken-agent-governance/policies/iam.allowedPolicyMemberDomains
-spec:
-  rules:
-  - allowAll: true

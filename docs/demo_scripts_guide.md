@@ -74,11 +74,11 @@ Because CLI commands like `gcloud beta iap web add-iam-policy-binding` do not ye
 ### Usage
 ```bash
 # Secure the egress plane for a specific agent
-PROJECT_ID=zken-agent-governance \
-PROJECT_NUMBER=644450226197 \
-ORG_ID=284355623615 \
+PROJECT_ID=<PROJECT_ID> \
+PROJECT_NUMBER=<PROJECT_NUMBER> \
+ORG_ID=<ORG_ID> \
 REGION=us-central1 \
-./scripts/grant_agent_mcp_egress.sh --agent-id 8785940681592930304
+./scripts/grant_agent_mcp_egress.sh --agent-id <AGENT_ID>
 ```
 
 ---

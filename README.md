@@ -58,7 +58,6 @@ agent-gateway/
 ├── scripts/
 │   └── grant_agent_mcp_egress.sh    # Per-MCP IAP egress IAM (run after deploy)
 ├── skaffold.yaml.tmpl               # Multi-service build + Cloud Run deploy
-├── codelab.md                       # Full walkthrough (source of truth)
 └── docs/architecture.png
 ```
 
@@ -74,7 +73,7 @@ agent-gateway/
 
 ## Quick start
 
-The full procedure with explanations lives in [`codelab.md`](codelab.md).
+The full procedure with explanations lives in the [codelab](https://codelabs.developers.google.com/cloudnet-agent-gateway).
 Condensed:
 
 ```bash
@@ -97,7 +96,7 @@ cp terraform/example.backend.conf terraform/backend.conf
 
 # 3. Configure Terraform variables
 cp terraform/example.tfvars terraform/terraform.tfvars
-# Edit terraform/terraform.tfvars (see codelab.md for the variable reference)
+# Edit terraform/terraform.tfvars (see the codelab for the variable reference)
 
 # 4. Deploy infrastructure
 cd terraform
@@ -148,13 +147,14 @@ cd ../..
 - **Cleanup:** `terraform destroy` (after deleting the deployed Reasoning
   Engine first).
 
-Each is covered in [`codelab.md`](codelab.md), including troubleshooting
+Each is covered in the [codelab](https://codelabs.developers.google.com/cloudnet-agent-gateway), including troubleshooting
 (gateway settle time, missing IAM, DNS peering, image tag conflicts).
-
-## Contributing
-
-See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ## License
 
 [Apache License 2.0](LICENSE)
+
+NOTICE: `src/`, `terraform/`, `cloudrun/`, `skaffold.yaml.tmpl` and `docs/troubleshooting.md` are
+derived from the `demos/agent-gateway` sample in
+[GoogleCloudPlatform/cloud-networking-solutions](https://github.com/GoogleCloudPlatform/cloud-networking-solutions),
+Copyright Google LLC, licensed under the Apache License 2.0.

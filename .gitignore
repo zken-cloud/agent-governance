@@ -82,3 +82,7 @@ k8s/legacy-dms/kustomization.yaml
 
 # Codelab
 codelab.md
+
+# Generated / environment-specific files
+deployment_metadata.json
+terraform/allowed_domains.yaml
